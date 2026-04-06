@@ -21,8 +21,11 @@ RUN npm install --omit=dev && \
 # Copy project
 COPY . .
 
-# Ensure image directory exists
-RUN mkdir -p image
+# Move existing data into a single data directory for volume persistence
+RUN mkdir -p data/image && \
+    mv image/* data/image/ 2>/dev/null || true && \
+    mv database.sqlite data/database.sqlite 2>/dev/null || true && \
+    rm -rf image/
 
 # Expose port
 EXPOSE 3000

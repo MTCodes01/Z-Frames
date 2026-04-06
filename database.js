@@ -1,11 +1,19 @@
 require('dotenv').config({ quiet: true });
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const fs = require('fs');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const { promisify } = require('util');
 
-const dbPath = path.join(__dirname, 'database.sqlite');
+const dbPath = process.env.DATABASE_PATH || path.join(__dirname, 'database.sqlite');
+
+// Ensure directory for database exists if it's not root
+const dbDir = path.dirname(dbPath);
+if (!fs.existsSync(dbDir)) {
+	fs.mkdirSync(dbDir, { recursive: true });
+}
+
 const db = new sqlite3.Database(dbPath, (err) => {
 	if (err) {
 		console.error('Error opening database:', err);

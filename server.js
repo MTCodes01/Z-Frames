@@ -7,9 +7,9 @@ const { createUser, GetNewToken, verifyToken, log, Getids, IncrementImageId, Get
 
 const app = express();
 const PORT = 3000;
-const uploadFolder = 'image';
+const uploadFolder = process.env.IMAGE_PATH || 'image';
 const fallbackFilename = `0.png`; // this is the image which is shown when the requested image is not present
-if (!fs.existsSync(uploadFolder)) fs.mkdirSync(uploadFolder);
+if (!fs.existsSync(uploadFolder)) fs.mkdirSync(uploadFolder, { recursive: true });
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
