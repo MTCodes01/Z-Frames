@@ -105,6 +105,12 @@ app.post('/upload', upload.single('image'), async (req, res) => {
 app.post('/reset_token', async (req, res) => {
 	try {
 		const { username, password } = req.body;
+		if (!username || !password) {
+			return res.status(400).json({
+				success: false,
+				error: 'Username and password required'
+			});
+		}
 		const result = await GetNewToken(username, password);
 
 		if (result.status === "success") {
@@ -161,6 +167,12 @@ app.post('/get_token', async (req, res) => {
 app.post('/create_user', async (req, res) => {
 	try {
 		const { admin_password, username, password } = req.body;
+		if (!admin_password || !username || !password) {
+			return res.status(400).json({
+				success: false,
+				error: 'Missing required fields'
+			});
+		}
 		const result = await createUser(admin_password, username, password);
 
 		if (result.status === "success") {

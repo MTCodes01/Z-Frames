@@ -49,6 +49,12 @@ db.serialize(() => {
 });
 
 async function createUser(admin_password, username, password) {
+	if (!admin_password || !username || !password) {
+		return {
+			status: "fail",
+			reason: "missing required fields"
+		};
+	}
 	if (process.env.ADMIN_PASSWORD !== admin_password) {
 		return {
 			status: "fail",
@@ -85,6 +91,12 @@ async function createUser(admin_password, username, password) {
 }
 
 async function GetNewToken(username, password) {
+	if (!username || !password) {
+		return {
+			status: "fail",
+			reason: "missing required fields"
+		};
+	}
 	try {
 		const row = await db.getAsync(
 			`SELECT * FROM users WHERE username = ?`,
@@ -229,6 +241,12 @@ async function GetUserToken(username) {
 }
 
 async function verifyCredentials(username, password) {
+	if (!username || !password) {
+		return {
+			status: "fail",
+			reason: "missing required fields"
+		};
+	}
 	try {
 		const row = await db.getAsync(
 			`SELECT * FROM users WHERE username = ?`,
