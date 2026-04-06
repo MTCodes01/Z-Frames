@@ -16,7 +16,8 @@ if (!fs.existsSync(dbDir)) {
 
 const db = new sqlite3.Database(dbPath, (err) => {
 	if (err) {
-		console.error('Error opening database:', err);
+		console.error(`ERROR: Could not open database at ${dbPath}:`, err);
+		console.error(`Current directory: ${process.cwd()}, DATABASE_PATH env: ${process.env.DATABASE_PATH}`);
 		process.exit(1);
 	}
 });

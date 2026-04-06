@@ -6,8 +6,8 @@ const sharp = require('sharp');
 const { createUser, GetNewToken, verifyToken, log, Getids, IncrementImageId, GetUserToken, verifyCredentials } = require('./database');
 
 const app = express();
-const PORT = 3000;
-const uploadFolder = process.env.IMAGE_PATH || 'image';
+const PORT = process.env.PORT || 3000;
+const uploadFolder = process.env.IMAGE_PATH || path.join(__dirname, 'image');
 const fallbackFilename = `0.png`; // this is the image which is shown when the requested image is not present
 if (!fs.existsSync(uploadFolder)) fs.mkdirSync(uploadFolder, { recursive: true });
 
@@ -385,7 +385,7 @@ app.get('/api/user-images', async (req, res) => {
 					images.push({
 						id: i,
 						filename: filename,
-						url: `/images/${filename}`,
+						url: `/image/${filename}`,
 						size: stats.size,
 						uploadDate: stats.mtime,
 						extension: ext
@@ -416,4 +416,14 @@ app.get('/api/user-images', async (req, res) => {
 });
 app.use(express.static('public'));
 
-app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
+app.listen(PORT, "0.0.0.0", () => {
+	console.log(`Server running on port ${PORT}`);
+});
+
+process.on('uncaughtException', (err) => {
+	console.error('Uncaught Exception:', err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+	console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
