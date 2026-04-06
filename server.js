@@ -16,6 +16,15 @@ const upload = multer({ storage });
 
 app.use(express.json());
 
+app.get('/version', (req, res) => {
+	res.json({
+		status: "success",
+		version: "1.0.0",
+		name: "IEEE Image Server"
+	});
+});
+
+
 app.post('/upload', upload.single('image'), async (req, res) => {
 	try {
 		const { token } = req.body;
